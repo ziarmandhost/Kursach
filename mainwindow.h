@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <databaseitem.h>
 #include <QMainWindow>
 #include <QStandardItemModel>
 
@@ -14,7 +15,14 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void createTable(Ui::MainWindow *ui, QStandardItemModel *model);
+
+    void createTable(QStandardItemModel *model);
+
+    void createDatabase(DatabaseItem *item);
+
+    bool isValueEmpty (QString qstr);
+private slots:
+    void on_add_item_button_clicked();
 
 private:
     Ui::MainWindow *ui;
