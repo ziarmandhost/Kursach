@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <databaseitem.h>
@@ -17,8 +17,11 @@ public:
     ~MainWindow();
 
     void createTable(QStandardItemModel *model);
+    void updateTable(QStandardItemModel *model);
 
     void createDatabase(DatabaseItem *item);
+    vector<vector<string>> readDataFromDatabase();
+    int getDataRowsCountDatabase();
 
     bool isValueEmpty (QString qstr);
 private slots:

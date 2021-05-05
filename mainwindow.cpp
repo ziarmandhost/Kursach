@@ -1,47 +1,17 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "databaseitem.h"
+
+#include "Database.cpp"
 
 #include <QMessageBox>
-#include <fstream>
-#include <iostream>
+#include <QDebug>
 
-#include <databaseitem.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
-
-void MainWindow::createTable(QStandardItemModel *model) {
-    // Меняем заголовок
-    model->setHeaderData(0, Qt::Horizontal, "ID");
-    model->setHeaderData(1, Qt::Horizontal, "Название");
-    model->setHeaderData(2, Qt::Horizontal, "Тип");
-    model->setHeaderData(3, Qt::Horizontal, "Особенность");
-    model->setHeaderData(4, Qt::Horizontal, "Доступность");
-    model->setHeaderData(5, Qt::Horizontal, "Действия");
-
-    // Заполняем таблицу фейковыми значениями
-    QModelIndex index;
-
-    for (int row = 0; row < model->rowCount(); row++) {
-        for (int column = 0; column < model->columnCount(); column++) {
-            index = model->index(row, column);
-
-            model->setData(index, "empty");
-        }
-    }
-}
-
-void MainWindow::createDatabase(DatabaseItem *item) {
-    fstream DATABASE;
-    DATABASE.open("database.csv", ios::out | ios::app);
-
-    DATABASE << item->ID << ","
-             << '\"' << item->title << '\"' << ","
-             << '\"' << item->type << '\"' << ","
-             << '\"' << item->features << '\"' << ","
-             << item->isAvailable << '\n';
-
-    DATABASE.close();
-}
 
 bool MainWindow::isValueEmpty (QString qstr) {
     const wchar_t* wideCharacterString = (const wchar_t*) qstr.constData();
@@ -53,11 +23,12 @@ bool MainWindow::isValueEmpty (QString qstr) {
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    mainTableModel = new QStandardItemModel(5, 6, this);
+    mainTableModel = new QStandardItemModel(0, 5, this);
     ui->tableView->setModel(mainTableModel);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableView->verticalHeader()->hide();
-    MainWindow::createTable(mainTableModel);
+    Database::createTable(mainTableModel);
+    Database::updateTable(mainTableModel);
 
 
 
@@ -65,14 +36,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->addItemTable->setModel(addItemTableModel);
     ui->addItemTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->addItemTable->verticalHeader()->hide();
-    MainWindow::createTable(addItemTableModel);
+    Database::createTable(addItemTableModel);
 
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
-
 
 void MainWindow::on_add_item_button_clicked() {
     QVariant idData = ui->addItemTable->model()->index(0, 0).data();
@@ -110,7 +80,18 @@ void MainWindow::on_add_item_button_clicked() {
                     featuresData.toString().toStdString(),
                     isAvailable.toBool());
 
-        MainWindow::createDatabase(item);
+        Database::createDatabase(item);
+
+        QModelIndex index;
+
+        for (int column = 0; column < ui->addItemTable->model()->columnCount(); column++) {
+            index = ui->addItemTable->model()->index(0, column);
+
+            ui->addItemTable->model()->setData(index, "");
+        }
+
+
+        Database::updateTable(mainTableModel);
     }
 
 }
