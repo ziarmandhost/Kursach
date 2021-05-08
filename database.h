@@ -10,6 +10,8 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <iomanip>
+#include <ctime>
 
 #include <QDebug>
 
@@ -24,6 +26,8 @@ public:
     static vector<vector<string>> read();
     static bool find(int id);
     static void deleteRow(int row);
+
+    static string getCurrentTimt();
 };
 
 #endif // DATABASE_H

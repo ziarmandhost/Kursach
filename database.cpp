@@ -1,7 +1,15 @@
 #include "database.h"
-#include "utils.h"
 
-using namespace utils;
+string Database::getCurrentTimt() {
+    auto t = time(nullptr);
+    auto tm = *localtime(&t);
+
+    ostringstream oss;
+    oss << put_time(&tm, "%d-%m-%Y %H-%M-%S");
+    string data = oss.str();
+
+    return data;
+}
 
 int Database::getDataRowsCount() {
     int rows = 0;
@@ -24,7 +32,8 @@ void Database::create(DatabaseItem *item) {
              << '\"' << item->title << '\"' << ","
              << '\"' << item->type << '\"' << ","
              << '\"' << item->features << '\"' << ","
-             << item->isAvailable << '\n';
+             << '\"' << item->isAvailable << '\"' << ","
+             << Database::getCurrentTimt() << '\n';
 
     DATABASE.close();
 }
@@ -102,10 +111,11 @@ void Database::deleteRow(int row) {
 
         if (i != row) {
             DATABASE_edited << data[i][0] << ","
-                 << '\"' << data[i][1] << '\"' << ","
-                 << '\"' << data[i][2] << '\"' << ","
-                 << '\"' << data[i][3] << '\"' << ","
-                 << data[i][4] << '\n';
+                 << data[i][1] << ","
+                 << data[i][2] << ","
+                 << data[i][3] << ","
+                 << data[i][4] << ","
+                 << data[i][5] << '\n';
         }
 
     }
@@ -115,6 +125,7 @@ void Database::deleteRow(int row) {
     remove("database.csv");
     rename("databasenew.csv", "database.csv");
 }
+
 
 
 

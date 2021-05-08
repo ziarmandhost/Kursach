@@ -19,8 +19,7 @@ HEADERS += \
     database.h \
     databaseitem.h \
     mainwindow.h \
-    table.h \
-    utils.h
+    table.h
 
 FORMS += \
     mainwindow.ui

@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
 
     // Table widget
-    Table::create(ui->tableWidget, 0, 6);
+    Table::create(ui->tableWidget, 0, 7);
     Table::update(ui->tableWidget);
 
     // Add item mini table
@@ -70,7 +70,9 @@ void MainWindow::on_add_item_button_clicked() {
                     titleData.toString().toStdString(),
                     typeData.toString().toStdString(),
                     featuresData.toString().toStdString(),
-                    isAvailable.toString().toStdString());
+                    isAvailable.toString().toStdString(),
+                    Database::getCurrentTimt()
+        );
 
         Database::create(item);
 

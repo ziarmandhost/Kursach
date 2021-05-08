@@ -9,7 +9,7 @@ using namespace std;
 
 class DatabaseItem {
 public:
-    DatabaseItem(int ID, string title, string type, string features, string isAvailable);
+    DatabaseItem(int ID, string title, string type, string features, string isAvailable, string date);
 
 public:
         int ID;
@@ -17,6 +17,7 @@ public:
         string type;
         string features;
         string isAvailable;
+        string date;
 };
 
 #endif // DATABASEITEM_H

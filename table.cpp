@@ -10,7 +10,6 @@ void Table::create(QStandardItemModel *model) {
     model->setHeaderData(2, Qt::Horizontal, "Type");
     model->setHeaderData(3, Qt::Horizontal, "Special info");
     model->setHeaderData(4, Qt::Horizontal, "Availability");
-    model->setHeaderData(5, Qt::Horizontal, "Actions");
 }
 
 void Table::create(QTableWidget *table, int rowsCount, int columnsCount) {
@@ -18,7 +17,7 @@ void Table::create(QTableWidget *table, int rowsCount, int columnsCount) {
     table->setColumnCount(columnsCount);
 
     QStringList labels;
-    labels << "ID" << "Title" << "Type" << "Special info" << "Availability" << "Actions";
+    labels << "ID" << "Title" << "Type" << "Special info" << "Availability" << "Created date" << "Actions";
     table->setHorizontalHeaderLabels(labels);
 
     // Table params
@@ -47,7 +46,7 @@ void Table::update(QTableWidget *table) {
         for (int column = 0; column < table->columnCount(); column++) {
             item = new QTableWidgetItem();
 
-            if (column == 5) {
+            if (column == 6) {
                 QPushButton *deleteBtn = new QPushButton("Delete");
 
                 QAbstractButton::connect(deleteBtn, &QPushButton::clicked, deleteBtn, [table, row]() {
@@ -61,9 +60,14 @@ void Table::update(QTableWidget *table) {
                 widget->setFixedWidth(70);
                 widget->setLayout(layout);
 
-                table->setCellWidget(row, 5, widget);
+                table->setCellWidget(row, 6, widget);
             }
-            else item->setText(QString::fromStdString(data[row][column]));
+            else {
+                string cell = data[row][column];
+                cell = cell.substr(1, cell.size() - 2);
+
+                item->setText(QString::fromStdString(cell));
+            }
 
             table->setItem(row, column, item);
         }
