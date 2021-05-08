@@ -23,6 +23,7 @@ public:
     static void create(DatabaseItem *item);
     static vector<vector<string>> read();
     static bool find(int id);
+    static void deleteRow(int row);
 };
 
 #endif // DATABASE_H

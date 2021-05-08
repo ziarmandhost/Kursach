@@ -1,4 +1,7 @@
 #include "database.h"
+#include "utils.h"
+
+using namespace utils;
 
 int Database::getDataRowsCount() {
     int rows = 0;
@@ -87,3 +90,46 @@ bool Database::find(int id) {
 
     return isInDatabaseRow;
 }
+
+void Database::deleteRow(int row) {
+    vector<vector<string>> data = Database::read();
+
+    fstream DATABASE_edited;
+
+    DATABASE_edited.open("databasenew.csv", ios::out);
+
+    for (int i = 0; i < (int)data.size(); i++) {
+
+        if (i != row) {
+            DATABASE_edited << data[i][0] << ","
+                 << '\"' << data[i][1] << '\"' << ","
+                 << '\"' << data[i][2] << '\"' << ","
+                 << '\"' << data[i][3] << '\"' << ","
+                 << data[i][4] << '\n';
+        }
+
+    }
+
+    DATABASE_edited.close();
+
+    remove("database.csv");
+    rename("databasenew.csv", "database.csv");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

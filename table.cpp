@@ -2,6 +2,7 @@
 
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QHeaderView>
 
 void Table::create(QStandardItemModel *model) {
     model->setHeaderData(0, Qt::Horizontal, "ID");
@@ -12,47 +13,66 @@ void Table::create(QStandardItemModel *model) {
     model->setHeaderData(5, Qt::Horizontal, "Actions");
 }
 
-bool isStringContainNumber(string &line) {
-    string NUMBERS = "0123456789";
+void Table::create(QTableWidget *table, int rowsCount, int columnsCount) {
+    table->setRowCount(rowsCount);
+    table->setColumnCount(columnsCount);
 
-    for (int x = 0; x < (int)(line.size()); x++) {
-        for (int y = 0; y < (int)(NUMBERS.size()); y++) {
-            if (NUMBERS[y] == line[x])
-                return true;
-        }
-    }
+    QStringList labels;
+    labels << "ID" << "Title" << "Type" << "Special info" << "Availability" << "Actions";
+    table->setHorizontalHeaderLabels(labels);
 
-    return false;
+    // Table params
+    table->setShowGrid(true);
+    table->setSortingEnabled(true);
+    table->setCornerButtonEnabled(true);
+    table->setAlternatingRowColors(true);
+
+    table->horizontalHeader()->setVisible(true);
+    table->horizontalHeader()->setDefaultSectionSize(150);
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    // Cell
+    table->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    table->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
-void Table::update(QStandardItemModel *model, Ui::MainWindow* ui) {
+void Table::update(QTableWidget *table) {
     int rowsCount = Database::getDataRowsCount();
-    model->setRowCount(rowsCount);
+    table->setRowCount(rowsCount);
 
     vector<vector<string>> data = Database::read();
 
-    QModelIndex index;
-    qDebug() << "DEBUG INFO " << data.size();
+    for (int row = 0; row < table->rowCount(); row++) {
+        QTableWidgetItem *item;
+        for (int column = 0; column < table->columnCount(); column++) {
+            item = new QTableWidgetItem();
 
-    for (int row = 0; row < model->rowCount(); row++) {
-        for (int column = 0; column < model->columnCount(); column++) {
-            index = model->index(row, column);
+            if (column == 5) {
+                QPushButton *deleteBtn = new QPushButton("Delete");
 
-            if (column == 4) {
-                if (isStringContainNumber(data[row][4]) && stoi(data[row][4]) == 1) model->setData(index, QString::fromStdString("+"));
-                else if (isStringContainNumber(data[row][4]) && stoi(data[row][4]) == 0) model->setData(index, QString::fromStdString("-"));
-                else model->setData(index, QString::fromStdString(data[row][4]));
+                QAbstractButton::connect(deleteBtn, &QPushButton::clicked, deleteBtn, [table, row]() {
+                    Table::deleteRow(table, row);
+                });
+
+                QHBoxLayout *layout = new QHBoxLayout();
+                layout->addWidget(deleteBtn);
+
+                QWidget *widget = new QWidget();
+                widget->setFixedWidth(70);
+                widget->setLayout(layout);
+
+                table->setCellWidget(row, 5, widget);
             }
-            else if (column == 5) {
-//                QHBoxLayout *l = new QHBoxLayout();
-//                l->addWidget((new QPushButton("I`m in cell")));
+            else item->setText(QString::fromStdString(data[row][column]));
 
-//                QWidget *widget = new QWidget();
-//                widget->setLayout(l);
-
-//                ui->tableView->setCellWidget(row, 5, widget);
-            }
-            else model->setData(index, QString::fromStdString(data[row][column]));
+            table->setItem(row, column, item);
         }
+
+        table->setRowHeight(row, 40);
     }
+}
+
+void Table::deleteRow(QTableWidget *table, int row) {
+    Database::deleteRow(row);
+    table->removeRow(row);
 }

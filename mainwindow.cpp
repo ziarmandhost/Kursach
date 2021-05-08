@@ -6,21 +6,16 @@ using namespace std;
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    mainTableModel = new QStandardItemModel(0, 6, this);
-    ui->tableView->setModel(mainTableModel);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-//    ui->tableView->verticalHeader()->hide();
-    Table::create(mainTableModel);
-    Table::update(mainTableModel, ui);
+    // Table widget
+    Table::create(ui->tableWidget, 0, 6);
+    Table::update(ui->tableWidget);
 
-
-
+    // Add item mini table
     addItemTableModel = new QStandardItemModel(1, 5, this);
     ui->addItemTable->setModel(addItemTableModel);
     ui->addItemTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->addItemTable->verticalHeader()->hide();
     Table::create(addItemTableModel);
-
 }
 
 MainWindow::~MainWindow() {
@@ -88,7 +83,7 @@ void MainWindow::on_add_item_button_clicked() {
         }
 
 
-        Table::update(mainTableModel, ui);
+        Table::update(ui->tableWidget);
     }
 
 }

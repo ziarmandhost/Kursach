@@ -18,8 +18,10 @@ class Table {
 public:
     Table();
 
-    static void create(QStandardItemModel *model);
-    static void update(QStandardItemModel *model, Ui::MainWindow* ui);
+    static void create(QStandardItemModel *table);
+    static void create(QTableWidget *table, int rowsCount, int columnsCount);
+    static void update(QTableWidget *model);
+    static void deleteRow(QTableWidget *table, int row);
 };
 
 #endif // TABLE_H

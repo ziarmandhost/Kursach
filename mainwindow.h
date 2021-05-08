@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QMainWindow>
-#include <QStandardItemModel>
+#include <QTableWidget>
 
 #include <algorithm>
 #include <iostream>
@@ -31,7 +31,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    QStandardItemModel *mainTableModel;
     QStandardItemModel *addItemTableModel;
 
 };
