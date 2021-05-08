@@ -1,34 +1,17 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "databaseitem.h"
-
-#include "Database.cpp"
-
-#include <QMessageBox>
-#include <QDebug>
-
-#include <iostream>
-#include <fstream>
-#include <sstream>
 
 using namespace std;
-
-bool MainWindow::isValueEmpty (QString qstr) {
-    const wchar_t* wideCharacterString = (const wchar_t*) qstr.constData();
-    unsigned int offsetOfFirstNonBlank = wcsspn(wideCharacterString, L" ");
-
-    return !*(wideCharacterString+offsetOfFirstNonBlank);
-}
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 
-    mainTableModel = new QStandardItemModel(0, 5, this);
+    mainTableModel = new QStandardItemModel(0, 6, this);
     ui->tableView->setModel(mainTableModel);
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->tableView->verticalHeader()->hide();
-    Database::createTable(mainTableModel);
-    Database::updateTable(mainTableModel);
+//    ui->tableView->verticalHeader()->hide();
+    Table::create(mainTableModel);
+    Table::update(mainTableModel, ui);
 
 
 
@@ -36,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->addItemTable->setModel(addItemTableModel);
     ui->addItemTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->addItemTable->verticalHeader()->hide();
-    Database::createTable(addItemTableModel);
+    Table::create(addItemTableModel);
 
 }
 
@@ -51,36 +34,50 @@ void MainWindow::on_add_item_button_clicked() {
     QVariant featuresData = ui->addItemTable->model()->index(0, 3).data();
     QVariant isAvailable = ui->addItemTable->model()->index(0, 4).data();
 
-    bool isIdValid = !MainWindow::isValueEmpty(idData.toString());
-    bool isTitleValid = !MainWindow::isValueEmpty(titleData.toString());
-    bool isTypeValid = !MainWindow::isValueEmpty(typeData.toString());
-    bool isFeaturesValid = !MainWindow::isValueEmpty(featuresData.toString());
+    bool isIdValid = !idData.toString().toStdString().empty();
+    bool isTitleValid = !titleData.toString().toStdString().empty();
+    bool isTypeValid = !typeData.toString().toStdString().empty();
+    bool isFeaturesValid = !featuresData.toString().toStdString().empty();
 
-    if (!isIdValid)
-        QMessageBox::question(this, tr("Ошибка!"),
+    if (!isIdValid) {
+        QMessageBox::critical(this, tr("Ошибка!"),
                               tr("Невозможно добавить новый элемент. Поле \"ID\" пустое или некорректное."), QMessageBox::Yes);
+        return;
+    }
 
-    if (!isTitleValid)
-        QMessageBox::question(this, tr("Ошибка!"),
+    if (!isTitleValid) {
+        QMessageBox::critical(this, tr("Ошибка!"),
                               tr("Невозможно добавить новый элемент. Поле \"Название\" пустое или некорректное."), QMessageBox::Yes);
+        return;
+    }
 
-    if (!isTypeValid)
-        QMessageBox::question(this, tr("Ошибка!"),
+    if (!isTypeValid) {
+        QMessageBox::critical(this, tr("Ошибка!"),
                               tr("Невозможно добавить новый элемент. Поле \"Тип\" пустое или некорректное."), QMessageBox::Yes);
+        return;
+    }
 
-    if (!isFeaturesValid)
-        QMessageBox::question(this, tr("Ошибка!"),
+    if (!isFeaturesValid) {
+        QMessageBox::critical(this, tr("Ошибка!"),
                               tr("Невозможно добавить новый элемент. Поле \"Особенность\" пустое или некорректное."), QMessageBox::Yes);
+        return;
+    }
 
     if (isIdValid && isTitleValid && isTypeValid && isFeaturesValid) {
+        if (Database::find(idData.toInt())) {
+            QMessageBox::critical(this, tr("Ошибка!"),
+                                  tr(("Невозможно добавить новый элемент. Элемент с id "+to_string(idData.toInt())+" уже существует!").c_str()), QMessageBox::Yes);
+            return;
+        }
+
         DatabaseItem *item = new DatabaseItem(
                     idData.toInt(),
                     titleData.toString().toStdString(),
                     typeData.toString().toStdString(),
                     featuresData.toString().toStdString(),
-                    isAvailable.toBool());
+                    isAvailable.toString().toStdString());
 
-        Database::createDatabase(item);
+        Database::create(item);
 
         QModelIndex index;
 
@@ -91,7 +88,7 @@ void MainWindow::on_add_item_button_clicked() {
         }
 
 
-        Database::updateTable(mainTableModel);
+        Table::update(mainTableModel, ui);
     }
 
 }

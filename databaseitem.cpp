@@ -1,6 +1,6 @@
 #include "databaseitem.h"
 
-DatabaseItem::DatabaseItem(int ID, string title, string type, string features, bool isAvailable) {
+DatabaseItem::DatabaseItem(int ID, string title, string type, string features, string isAvailable) {
     this->ID = ID;
     this->title = title;
     this->type = type;

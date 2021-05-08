@@ -1,9 +1,18 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <databaseitem.h>
+#include "database.h"
+#include "table.h"
+
+#include <QMessageBox>
+#include <QDebug>
 #include <QMainWindow>
 #include <QStandardItemModel>
+
+#include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,14 +25,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void createTable(QStandardItemModel *model);
-    void updateTable(QStandardItemModel *model);
-
-    void createDatabase(DatabaseItem *item);
-    vector<vector<string>> readDataFromDatabase();
-    int getDataRowsCountDatabase();
-
-    bool isValueEmpty (QString qstr);
 private slots:
     void on_add_item_button_clicked();
 
@@ -32,5 +33,6 @@ private:
 
     QStandardItemModel *mainTableModel;
     QStandardItemModel *addItemTableModel;
+
 };
 #endif // MAINWINDOW_H
