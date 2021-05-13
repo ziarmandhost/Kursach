@@ -56,12 +56,13 @@ void Table::update(QTableWidget *table, Ui::MainWindow *ui) {
                 table->setCellWidget(row, 6, widget);
 
                 // Delete
-                QAbstractButton::connect(deleteBtn, &QPushButton::clicked, deleteBtn, [table, row]() {
+                QAbstractButton::connect(deleteBtn, &QPushButton::clicked, deleteBtn, [ui, table, row]() {
                     Table::deleteRow(table, row);
+                    ui->statusbar->showMessage("Last action: row sucessfully deleted from database");
                 });
 
                 // Save
-                QAbstractButton::connect(saveBtn, &QPushButton::clicked, saveBtn, [ui, item, row]() {
+                QAbstractButton::connect(saveBtn, &QPushButton::clicked, saveBtn, [ui, row]() {
                     int id = ui->tableWidget->model()->index(row, 0).data().toInt();
                     string title = ui->tableWidget->model()->index(row, 1).data().toString().toStdString();
                     string type = ui->tableWidget->model()->index(row, 2).data().toString().toStdString();
@@ -74,6 +75,8 @@ void Table::update(QTableWidget *table, Ui::MainWindow *ui) {
 
                     auto tableModel = ui->tableWidget->model();
                     tableModel->setData(tableModel->index(row, 5), QString::fromStdString(updated));
+
+                    ui->statusbar->showMessage("Last action: row sucessfully saved to database");
                 });
             }
             else {

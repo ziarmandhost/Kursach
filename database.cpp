@@ -186,8 +186,10 @@ void Database::import(string path) {
     }
 
     DATABASE_edited.close();
+}
 
-    qDebug() << "Correct";
+void Database::exportBase(string path) {
+    QFile::copy("database.csv", path.c_str());
 }
 
 

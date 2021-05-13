@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // Table widget
     Table::create(ui->tableWidget, 0, 7);
     Table::update(ui->tableWidget, ui);
+    ui->statusbar->showMessage("Last action: database loaded");
 
     // Add item mini table
     addItemTableModel = new QStandardItemModel(1, 5, this);
@@ -90,6 +91,7 @@ void MainWindow::on_add_item_button_clicked() {
 
 
         Table::update(ui->tableWidget, ui);
+        ui->statusbar->showMessage("Last action: new item successfully added and saved to database");
     }
 
 }
@@ -99,14 +101,37 @@ void MainWindow::on_search_btn_clicked() {
 }
 
 void MainWindow::on_import_btn_clicked() {
-    string desktopPath = QString("%1/autoexec.cfg").arg(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toStdString();
+    string desktopPath = QString("%1/database.csv").arg(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toStdString();
 
-    string fileName = QFileDialog::getOpenFileName(this, tr("Open table"), desktopPath.c_str(), tr("Spreadsheet Files (*.csv)")).toStdString();
-    if (fileName.length() > 1) Database::import(fileName);
-
-    Table::update(ui->tableWidget, ui);
+    string fileName = QFileDialog::getOpenFileName(this, tr("Open database"), desktopPath.c_str(), tr("Spreadsheet Files (*.csv)")).toStdString();
+    if (fileName.length() > 1) {
+        Database::import(fileName);
+        Table::update(ui->tableWidget, ui);
+        ui->statusbar->showMessage("Last action: database imported successfully");
+    }
 }
 
 void MainWindow::on_export_btn_clicked() {
-    qDebug() << "Export";
+    string desktopPath = QString("%1/database.csv").arg(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toStdString();
+
+    string fileName = QFileDialog::getSaveFileName(this, tr("Save database"), desktopPath.c_str(), tr("Spreadsheet Files (*.csv)")).toStdString();
+    if (fileName.length() > 1) {
+        Database::exportBase(fileName);
+        ui->statusbar->showMessage("Last action: database exported successfully");
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

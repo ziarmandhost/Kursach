@@ -30,6 +30,7 @@ public:
     static void deleteRow(int row);
 
     static void import(string path);
+    static void exportBase(string path);
 
     static string getCurrentTimt();
 };
