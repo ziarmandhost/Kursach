@@ -35,6 +35,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="clear_filters_btn">
+         <property name="text">
+          <string>Очистить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="search_btn">
          <property name="text">
           <string>Искать</string>

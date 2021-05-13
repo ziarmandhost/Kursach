@@ -96,10 +96,6 @@ void MainWindow::on_add_item_button_clicked() {
 
 }
 
-void MainWindow::on_search_btn_clicked() {
-    qDebug() << "Search";
-}
-
 void MainWindow::on_import_btn_clicked() {
     string desktopPath = QString("%1/database.csv").arg(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toStdString();
 
@@ -119,6 +115,19 @@ void MainWindow::on_export_btn_clicked() {
         Database::exportBase(fileName);
         ui->statusbar->showMessage("Last action: database exported successfully");
     }
+}
+
+void MainWindow::on_clear_filters_btn_clicked() {
+    ui->line_edit->clear();
+    Table::update(ui->tableWidget, ui);
+}
+
+void MainWindow::on_line_edit_returnPressed() {
+    Table::searchInTable(ui);
+}
+
+void MainWindow::on_search_btn_clicked() {
+    Table::searchInTable(ui);
 }
 
 

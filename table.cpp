@@ -98,3 +98,63 @@ void Table::deleteRow(QTableWidget *table, int row) {
     Database::deleteRow(row);
     table->removeRow(row);
 }
+
+void Table::searchInTable(Ui::MainWindow *ui) {
+    QString searchValue = ui->line_edit->text();
+    vector<vector<string>> resultTable;
+
+    if (searchValue.length() > 1) {
+        vector<vector<string>> data = Database::read();
+
+        for (int i = 0; i < (int)data.size(); i++) {
+            string titleInData = QString(data[i][1].c_str()).toLower().toStdString();
+            string needle = searchValue.toLower().toStdString();
+
+            if (titleInData.find(needle) != string::npos) {
+                resultTable.push_back(data[i]);
+            }
+        }
+    }
+
+    if (resultTable.size() > 0) {
+        ui->tableWidget->model()->removeRows(0, ui->tableWidget->rowCount());
+        ui->tableWidget->setRowCount(resultTable.size());
+        ui->tableWidget->setColumnCount(7);
+
+        for (int row = 0; row < (int)resultTable.size(); row++) {
+            QTableWidgetItem *item;
+            for (int column = 0; column < (int)(resultTable[row].size()); column++) {
+                item = new QTableWidgetItem();
+
+                string cell = resultTable[row][column];
+                if (cell[0] == '\"' && cell[cell.length() - 1] == '\"')
+                    cell = cell.substr(1, cell.size() - 2);
+
+                item->setText(QString::fromStdString(cell));
+
+
+                ui->tableWidget->setItem(row, column, item);
+            }
+
+            ui->tableWidget->setRowHeight(row, 40);
+        }
+    }
+    else Table::update(ui->tableWidget, ui);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

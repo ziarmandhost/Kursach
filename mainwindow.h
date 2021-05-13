@@ -30,6 +30,8 @@ private slots:
     void on_search_btn_clicked();
     void on_import_btn_clicked();
     void on_export_btn_clicked();
+    void on_clear_filters_btn_clicked();
+    void on_line_edit_returnPressed();
 
 private:
     Ui::MainWindow *ui;
