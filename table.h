@@ -20,7 +20,7 @@ public:
 
     static void create(QStandardItemModel *table);
     static void create(QTableWidget *table, int rowsCount, int columnsCount);
-    static void update(QTableWidget *model);
+    static void update(QTableWidget *model, Ui::MainWindow *ui);
     static void deleteRow(QTableWidget *table, int row);
 };
 

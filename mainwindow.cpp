@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     // Table widget
     Table::create(ui->tableWidget, 0, 7);
-    Table::update(ui->tableWidget);
+    Table::update(ui->tableWidget, ui);
 
     // Add item mini table
     addItemTableModel = new QStandardItemModel(1, 5, this);
@@ -85,7 +85,7 @@ void MainWindow::on_add_item_button_clicked() {
         }
 
 
-        Table::update(ui->tableWidget);
+        Table::update(ui->tableWidget, ui);
     }
 
 }

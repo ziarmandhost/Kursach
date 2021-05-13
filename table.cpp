@@ -27,7 +27,7 @@ void Table::create(QTableWidget *table, int rowsCount, int columnsCount) {
     table->setAlternatingRowColors(true);
 
     table->horizontalHeader()->setVisible(true);
-    table->horizontalHeader()->setDefaultSectionSize(150);
+    table->horizontalHeader()->setDefaultSectionSize(100);
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     // Cell
@@ -35,7 +35,7 @@ void Table::create(QTableWidget *table, int rowsCount, int columnsCount) {
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
-void Table::update(QTableWidget *table) {
+void Table::update(QTableWidget *table, Ui::MainWindow *ui) {
     int rowsCount = Database::getDataRowsCount();
     table->setRowCount(rowsCount);
 
@@ -47,24 +47,43 @@ void Table::update(QTableWidget *table) {
             item = new QTableWidgetItem();
 
             if (column == 6) {
+                QPushButton *saveBtn = new QPushButton("Save");
                 QPushButton *deleteBtn = new QPushButton("Delete");
 
+                QHBoxLayout *layout = new QHBoxLayout();
+                layout->addWidget(saveBtn);
+                layout->addWidget(deleteBtn);
+
+                QWidget *widget = new QWidget();
+                widget->setLayout(layout);
+
+                table->setCellWidget(row, 6, widget);
+
+                // Delete
                 QAbstractButton::connect(deleteBtn, &QPushButton::clicked, deleteBtn, [table, row]() {
                     Table::deleteRow(table, row);
                 });
 
-                QHBoxLayout *layout = new QHBoxLayout();
-                layout->addWidget(deleteBtn);
+                // Save
+                QAbstractButton::connect(saveBtn, &QPushButton::clicked, saveBtn, [ui, item, row]() {
+                    int id = ui->tableWidget->model()->index(row, 0).data().toInt();
+                    string title = ui->tableWidget->model()->index(row, 1).data().toString().toStdString();
+                    string type = ui->tableWidget->model()->index(row, 2).data().toString().toStdString();
+                    string specialInfo = ui->tableWidget->model()->index(row, 3).data().toString().toStdString();
+                    string avalability = ui->tableWidget->model()->index(row, 4).data().toString().toStdString();
+                    string updated = Database::getCurrentTimt();
 
-                QWidget *widget = new QWidget();
-                widget->setFixedWidth(70);
-                widget->setLayout(layout);
+                    DatabaseItem *newItem = new DatabaseItem(id, title, type, specialInfo, avalability, updated);
+                    Database::updateRow(row, newItem);
 
-                table->setCellWidget(row, 6, widget);
+                    auto tableModel = ui->tableWidget->model();
+                    tableModel->setData(tableModel->index(row, 5), QString::fromStdString(updated));
+                });
             }
             else {
                 string cell = data[row][column];
-                cell = cell.substr(1, cell.size() - 2);
+                if (cell[0] == '\"' && cell[cell.length() - 1] == '\"')
+                    cell = cell.substr(1, cell.size() - 2);
 
                 item->setText(QString::fromStdString(cell));
             }

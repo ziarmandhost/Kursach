@@ -25,6 +25,7 @@ public:
     static void create(DatabaseItem *item);
     static vector<vector<string>> read();
     static bool find(int id);
+    static void updateRow(int rowId, DatabaseItem *item);
     static void deleteRow(int row);
 
     static string getCurrentTimt();
