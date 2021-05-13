@@ -109,7 +109,6 @@ void Database::updateRow(int rowId, DatabaseItem *item) {
 
     for (int i = 0; i < (int)data.size(); i++) {
 
-        qDebug() << rowId << i << "\n";
         if (rowId == i) {
             DATABASE_edited << item->ID << ","
                  << item->title << ","
@@ -160,6 +159,35 @@ void Database::deleteRow(int row) {
 
     remove("database.csv");
     rename("databasenew.csv", "database.csv");
+}
+
+void Database::import(string path) {
+    remove("database.csv");
+
+    fstream DATABASE_edited;
+    DATABASE_edited.open("database.csv", ios::out);
+
+    QFile file(path.c_str());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+
+    QTextStream in(&file);
+    QString line = in.readLine();
+    while (!line.isNull()) {
+        QStringList list = line.split(",");
+
+        DATABASE_edited << list[0].toStdString() << ","
+             << list[1].toStdString() << ","
+             << list[2].toStdString() << ","
+             << list[3].toStdString() << ","
+             << list[4].toStdString() << ","
+             << list[5].toStdString() << '\n';
+
+        line = in.readLine();
+    }
+
+    DATABASE_edited.close();
+
+    qDebug() << "Correct";
 }
 
 

@@ -14,6 +14,7 @@
 #include <ctime>
 
 #include <QDebug>
+#include <QFile>
 
 using namespace std;
 
@@ -27,6 +28,8 @@ public:
     static bool find(int id);
     static void updateRow(int rowId, DatabaseItem *item);
     static void deleteRow(int row);
+
+    static void import(string path);
 
     static string getCurrentTimt();
 };

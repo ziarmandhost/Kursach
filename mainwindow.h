@@ -27,6 +27,9 @@ public:
 
 private slots:
     void on_add_item_button_clicked();
+    void on_search_btn_clicked();
+    void on_import_btn_clicked();
+    void on_export_btn_clicked();
 
 private:
     Ui::MainWindow *ui;

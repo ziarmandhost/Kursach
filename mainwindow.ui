@@ -30,7 +30,7 @@
        <item>
         <widget class="QLineEdit" name="line_edit">
          <property name="placeholderText">
-          <string>Введите текст для поиска по таблице</string>
+          <string>Введите title для поиска по таблице</string>
          </property>
         </widget>
        </item>
@@ -42,7 +42,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="import_btn">
          <property name="text">
           <string>Импорт</string>
          </property>

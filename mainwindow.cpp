@@ -1,6 +1,10 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "mainwindow.h"
+#include <QFileDialog>
+#include <QStandardPaths>
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -88,4 +92,21 @@ void MainWindow::on_add_item_button_clicked() {
         Table::update(ui->tableWidget, ui);
     }
 
+}
+
+void MainWindow::on_search_btn_clicked() {
+    qDebug() << "Search";
+}
+
+void MainWindow::on_import_btn_clicked() {
+    string desktopPath = QString("%1/autoexec.cfg").arg(QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toStdString();
+
+    string fileName = QFileDialog::getOpenFileName(this, tr("Open table"), desktopPath.c_str(), tr("Spreadsheet Files (*.csv)")).toStdString();
+    if (fileName.length() > 1) Database::import(fileName);
+
+    Table::update(ui->tableWidget, ui);
+}
+
+void MainWindow::on_export_btn_clicked() {
+    qDebug() << "Export";
 }

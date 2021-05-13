@@ -8,6 +8,10 @@
 #include <QStandardItemModel>
 #include <QModelIndex>
 #include <ui_mainwindow.h>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QHeaderView>
+#include <QMainWindow>
 
 #include <string>
 #include <vector>

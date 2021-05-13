@@ -1,9 +1,5 @@
 #include "table.h"
 
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QHeaderView>
-
 void Table::create(QStandardItemModel *model) {
     model->setHeaderData(0, Qt::Horizontal, "ID");
     model->setHeaderData(1, Qt::Horizontal, "Title");
