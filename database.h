@@ -32,7 +32,7 @@ public:
     static void import(string path);
     static void exportBase(string path);
 
-    static string getCurrentTimt();
+    static string getCurrentTime();
 };
 
 #endif // DATABASE_H

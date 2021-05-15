@@ -1,6 +1,6 @@
 #include "database.h"
 
-string Database::getCurrentTimt() {
+string Database::getCurrentTime() {
     auto t = time(nullptr);
     auto tm = *localtime(&t);
 
@@ -30,10 +30,10 @@ void Database::create(DatabaseItem *item) {
 
     DATABASE << item->ID << ","
              << '\"' << item->title << '\"' << ","
-             << '\"' << item->type << '\"' << ","
-             << '\"' << item->features << '\"' << ","
-             << '\"' << item->isAvailable << '\"' << ","
-             << Database::getCurrentTimt() << '\n';
+             << item->traffic << ","
+             << item->endOfTerm << ","
+             << item->costPerMonth << ","
+             << Database::getCurrentTime() << '\n';
 
     DATABASE.close();
 }
@@ -112,9 +112,9 @@ void Database::updateRow(int rowId, DatabaseItem *item) {
         if (rowId == i) {
             DATABASE_edited << item->ID << ","
                  << item->title << ","
-                 << item->type << ","
-                 << item->features << ","
-                 << item->isAvailable << ","
+                 << item->traffic << ","
+                 << item->endOfTerm << ","
+                 << item->costPerMonth << ","
                  << item->date << '\n';
         }
         else {

@@ -32,6 +32,7 @@ private slots:
     void on_export_btn_clicked();
     void on_clear_filters_btn_clicked();
     void on_line_edit_returnPressed();
+    void on_filter_picker_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

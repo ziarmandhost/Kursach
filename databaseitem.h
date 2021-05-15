@@ -9,14 +9,14 @@ using namespace std;
 
 class DatabaseItem {
 public:
-    DatabaseItem(int ID, string title, string type, string features, string isAvailable, string date);
+    DatabaseItem(int ID, string title, string traffic, string endOfTerm, string costPerMonth, string date);
 
 public:
         int ID;
         string title;
-        string type;
-        string features;
-        string isAvailable;
+        string traffic;
+        string endOfTerm;
+        string costPerMonth;
         string date;
 };
 

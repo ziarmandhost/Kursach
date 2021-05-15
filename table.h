@@ -27,6 +27,12 @@ public:
     static void update(QTableWidget *model, Ui::MainWindow *ui);
     static void deleteRow(QTableWidget *table, int row);
     static void searchInTable(Ui::MainWindow *ui);
+
+    static void updateWithData(Ui::MainWindow *ui, vector<vector<string>> newData);
+
+    static void filterByIncreasingCostAndEndOfTermThisYear(Ui::MainWindow *ui);
+    static void filterByASCTitleAndEditTime(Ui::MainWindow *ui);
+    static void filterByASCTitleAndCostMoreThanAverage(Ui::MainWindow *ui);
 };
 
 #endif // TABLE_H

@@ -30,35 +30,68 @@
        <item>
         <widget class="QLineEdit" name="line_edit">
          <property name="placeholderText">
-          <string>Введите title для поиска по таблице</string>
+          <string>Enter the title of the tariff plan to search the table</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="clear_filters_btn">
          <property name="text">
-          <string>Очистить</string>
+          <string>Clear</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="search_btn">
          <property name="text">
-          <string>Искать</string>
+          <string>Search</string>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="filter_picker">
+         <property name="editable">
+          <bool>false</bool>
+         </property>
+         <property name="currentText">
+          <string>Filters</string>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Filters</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Show this year plans by increasing cost </string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Plans edited in last 3 month in aphabetical order</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Plans higher than average cost in aphabetical order</string>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="import_btn">
          <property name="text">
-          <string>Импорт</string>
+          <string>Import</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="export_btn">
          <property name="text">
-          <string>Экспорт</string>
+          <string>Export</string>
          </property>
         </widget>
        </item>
@@ -144,7 +177,7 @@
        <item>
         <widget class="QPushButton" name="add_item_button">
          <property name="text">
-          <string>Добавить</string>
+          <string>Add new item</string>
          </property>
         </widget>
        </item>

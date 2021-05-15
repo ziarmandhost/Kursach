@@ -21,6 +21,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->addItemTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->addItemTable->verticalHeader()->hide();
     Table::create(addItemTableModel);
+
+    // Filters QComboBox fix (make first element non editable)
+    QStandardItemModel* model = qobject_cast<QStandardItemModel*>(ui->filter_picker->model());
+    QModelIndex firstIndex = model->index(0, ui->filter_picker->modelColumn(), ui->filter_picker->rootModelIndex());
+    QStandardItem* firstItem = model->itemFromIndex(firstIndex);
+    firstItem->setSelectable(false);
 }
 
 MainWindow::~MainWindow() {
@@ -30,53 +36,60 @@ MainWindow::~MainWindow() {
 void MainWindow::on_add_item_button_clicked() {
     QVariant idData = ui->addItemTable->model()->index(0, 0).data();
     QVariant titleData = ui->addItemTable->model()->index(0, 1).data();
-    QVariant typeData = ui->addItemTable->model()->index(0, 2).data();
-    QVariant featuresData = ui->addItemTable->model()->index(0, 3).data();
-    QVariant isAvailable = ui->addItemTable->model()->index(0, 4).data();
+    QVariant traffic = ui->addItemTable->model()->index(0, 2).data();
+    QVariant endOfTerm = ui->addItemTable->model()->index(0, 3).data();
+    QVariant costPerMonth = ui->addItemTable->model()->index(0, 4).data();
 
     bool isIdValid = !idData.toString().toStdString().empty();
     bool isTitleValid = !titleData.toString().toStdString().empty();
-    bool isTypeValid = !typeData.toString().toStdString().empty();
-    bool isFeaturesValid = !featuresData.toString().toStdString().empty();
+    bool isTrafficValid = !traffic.toString().toStdString().empty();
+    bool isEndOfTermValid = !endOfTerm.toString().toStdString().empty();
+    bool isCostPerMonthValid = !costPerMonth.toString().toStdString().empty();
 
     if (!isIdValid) {
-        QMessageBox::critical(this, tr("Ошибка!"),
-                              tr("Невозможно добавить новый элемент. Поле \"ID\" пустое или некорректное."), QMessageBox::Yes);
+        QMessageBox::critical(this, tr("Error!"),
+                              tr("Unable to add new item. The \"ID\" field is empty or invalid."), QMessageBox::Yes);
         return;
     }
 
     if (!isTitleValid) {
-        QMessageBox::critical(this, tr("Ошибка!"),
-                              tr("Невозможно добавить новый элемент. Поле \"Название\" пустое или некорректное."), QMessageBox::Yes);
+        QMessageBox::critical(this, tr("Error!"),
+                              tr("Unable to add new item. The \"Title\" field is empty or invalid."), QMessageBox::Yes);
         return;
     }
 
-    if (!isTypeValid) {
-        QMessageBox::critical(this, tr("Ошибка!"),
-                              tr("Невозможно добавить новый элемент. Поле \"Тип\" пустое или некорректное."), QMessageBox::Yes);
+    if (!isTrafficValid) {
+        QMessageBox::critical(this, tr("Error!"),
+                              tr("Unable to add new item. The \"Traffic\" field is empty or invalid."), QMessageBox::Yes);
         return;
     }
 
-    if (!isFeaturesValid) {
-        QMessageBox::critical(this, tr("Ошибка!"),
-                              tr("Невозможно добавить новый элемент. Поле \"Особенность\" пустое или некорректное."), QMessageBox::Yes);
+    if (!isEndOfTermValid) {
+        QMessageBox::critical(this, tr("Error!"),
+                              tr("Unable to add new item. The \"End of term\" field is empty or invalid."), QMessageBox::Yes);
         return;
     }
 
-    if (isIdValid && isTitleValid && isTypeValid && isFeaturesValid) {
+    if (!isCostPerMonthValid) {
+        QMessageBox::critical(this, tr("Error!"),
+                              tr("Unable to add new item. The \"Cost per month\" field is empty or invalid."), QMessageBox::Yes);
+        return;
+    }
+
+    if (isIdValid && isTitleValid && isTrafficValid && isEndOfTermValid && isCostPerMonthValid) {
         if (Database::find(idData.toInt())) {
-            QMessageBox::critical(this, tr("Ошибка!"),
-                                  tr(("Невозможно добавить новый элемент. Элемент с id "+to_string(idData.toInt())+" уже существует!").c_str()), QMessageBox::Yes);
+            QMessageBox::critical(this, tr("Error!"),
+                                  tr(("Unable to add new item. Element with id "+to_string(idData.toInt())+" already exists!").c_str()), QMessageBox::Yes);
             return;
         }
 
         DatabaseItem *item = new DatabaseItem(
                     idData.toInt(),
                     titleData.toString().toStdString(),
-                    typeData.toString().toStdString(),
-                    featuresData.toString().toStdString(),
-                    isAvailable.toString().toStdString(),
-                    Database::getCurrentTimt()
+                    traffic.toString().toStdString(),
+                    endOfTerm.toString().toStdString(),
+                    costPerMonth.toString().toStdString(),
+                    Database::getCurrentTime()
         );
 
         Database::create(item);
@@ -130,7 +143,11 @@ void MainWindow::on_search_btn_clicked() {
     Table::searchInTable(ui);
 }
 
-
+void MainWindow::on_filter_picker_currentIndexChanged(int index) {
+    if (index == 1) Table::filterByIncreasingCostAndEndOfTermThisYear(ui);
+    else if (index == 2) Table::filterByASCTitleAndEditTime(ui);
+    else if (index == 3) Table::filterByASCTitleAndCostMoreThanAverage(ui);
+}
 
 
 
