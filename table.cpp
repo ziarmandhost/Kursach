@@ -1,6 +1,4 @@
 #include "table.h"
-#include <algorithm>
-#include <ctime>
 
 void Table::create(QStandardItemModel *model) {
     model->setHeaderData(0, Qt::Horizontal, "ID");
@@ -226,8 +224,6 @@ void Table::filterByASCTitleAndEditTime(Ui::MainWindow *ui) {
         int month = date.at(0).split("-").at(1).toInt();
 
         if (year == currentYear && currentMonth - 3 <= month && month <= currentMonth) newData.push_back(data[i]);
-        else qDebug() << year << " == " << currentYear << " && " << currentMonth - 3 << " <= " << month << " && " << month << " <= " << currentMonth << "\n";
-
     }
 
     for (int i = 1; i < (int)newData.size(); i++) {
