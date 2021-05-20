@@ -144,9 +144,9 @@ void MainWindow::on_search_btn_clicked() {
 }
 
 void MainWindow::on_filter_picker_currentIndexChanged(int index) {
-    if (index == 1) Table::filterByIncreasingCostAndEndOfTermThisYear(ui);
+    if (index == 1) Table::filterByCostAndEndOfTerm(ui);
     else if (index == 2) Table::filterByASCTitleAndEditTime(ui);
-    else if (index == 3) Table::filterByASCTitleAndCostMoreThanAverage(ui);
+    else if (index == 3) Table::filterByASCTitleAndCost(ui);
 }
 
 

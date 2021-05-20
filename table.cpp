@@ -181,7 +181,7 @@ void Table::searchInTable(Ui::MainWindow *ui) {
     else Table::update(ui->tableWidget, ui);
 }
 
-void Table::filterByIncreasingCostAndEndOfTermThisYear(Ui::MainWindow *ui) {
+void Table::filterByCostAndEndOfTerm(Ui::MainWindow *ui) {
     vector<vector<string>> data = Database::read();
 
     for (int i = 1; i < (int)data.size(); i++) {
@@ -238,7 +238,7 @@ void Table::filterByASCTitleAndEditTime(Ui::MainWindow *ui) {
     Table::updateWithData(ui, newData);
 }
 
-void Table::filterByASCTitleAndCostMoreThanAverage(Ui::MainWindow *ui) {
+void Table::filterByASCTitleAndCost(Ui::MainWindow *ui) {
     vector<vector<string>> data = Database::read();
     vector<vector<string>> newData;
 

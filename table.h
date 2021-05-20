@@ -32,9 +32,9 @@ public:
 
     static void updateWithData(Ui::MainWindow *ui, vector<vector<string>> newData);
 
-    static void filterByIncreasingCostAndEndOfTermThisYear(Ui::MainWindow *ui);
+    static void filterByCostAndEndOfTerm(Ui::MainWindow *ui);
     static void filterByASCTitleAndEditTime(Ui::MainWindow *ui);
-    static void filterByASCTitleAndCostMoreThanAverage(Ui::MainWindow *ui);
+    static void filterByASCTitleAndCost(Ui::MainWindow *ui);
 };
 
 #endif // TABLE_H
